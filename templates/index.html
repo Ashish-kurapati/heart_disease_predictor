@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 16px;
+        }
+        .green-box {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .red-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/predict" method="post">
+        <h2>Heart Disease Prediction</h2>
+
+        <label>Age:</label>
+        <input type="number" name="age" min="0" max="120" required>
+
+
+        <label>Sex (1=Male, 0=Female):</label>
+        <input type="number" name="sex" min="0" max="1" required>
+
+        <label>Chest Pain Type (0–3):</label>
+        <input type="number" name="cp" min="0" max="3" required>
+
+        <label>Resting Blood Pressure:</label>
+        <input type="number" name="trestbps" min="50" max="250" required>
+
+        <label>Cholesterol:</label>
+        <input type="number" name="chol" min="100" max="600" required>
+
+        <label>Fasting Blood Sugar (1 = true; 0 = false):</label>
+        <input type="number" name="fbs" min="0" max="1" required>
+
+        <label>Resting ECG Results (0–2):</label>
+        <input type="number" name="restecg" min="0" max="2" required>
+
+        <label>Maximum Heart Rate Achieved:</label>
+        <input type="number" name="thalach" min="60" max="250" required>
+
+        <label>Exercise-Induced Angina (1 = yes; 0 = no):</label>
+       <input type="number" name="exang" min="0" max="1" required>
+
+        <label>Oldpeak:</label>
+        <input type="number" step="0.1" name="oldpeak" min="0" max="10" required>
+
+        <label>Slope (0–2):</label>
+        <input type="number" name="slope" min="0" max="2" required>
+
+        <label>Number of Major Vessels (0–3):</label>
+       <input type="number" name="ca" min="0" max="3" required>
+
+        <label>Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect):</label>
+        <input type="number" name="thal" min="1" max="3" required>
+
+        <button type="submit">Predict</button>
+
+        {% if prediction %}
+  <div class="{{ 'green-box' if 'No Risk' in prediction else 'red-box' }}">
+    <strong>{{ prediction }}</strong>
+  </div>
+
+  <canvas id="riskChart" width="400" height="400" style="margin-top: 30px;"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('riskChart').getContext('2d');
+
+    const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Risk', 'No Risk'],
+            datasets: [{
+                label: 'Prediction',
+                data: [{{ 100 if 'at risk' in prediction|lower else 0 }}, {{ 0 if 'at risk' in prediction|lower else 100 }}],
+                backgroundColor: ['#dc3545', '#28a745'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+  </script>
+{% endif %}
