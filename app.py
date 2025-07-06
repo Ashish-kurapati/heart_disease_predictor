@@ -24,7 +24,8 @@ def predict():
     prediction = model.predict(data_scaled)
 
     # Prepare result
-    result = "Risk of Heart Disease" if prediction[0] == 1 else "No Risk of Heart Disease"
+   result = "No Risk of Heart Disease" if prediction[0] == 1 else "Risk of Heart Disease"
+
     
     return render_template("index.html", prediction=result)
 
