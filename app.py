@@ -26,7 +26,7 @@ def predict():
         # Debug log (helpful on Render deployment)
         print("Prediction value:", prediction)
 
-        # Check if model predicts risk or no risk (Assuming 1 = disease, 0 = no disease)
+        # Assuming: 1 = Risk, 0 = No Risk
         risk = prediction[0] == 1
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 

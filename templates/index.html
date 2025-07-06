@@ -57,7 +57,6 @@
         <label>Age:</label>
         <input type="number" name="age" min="0" max="120" required>
 
-
         <label>Sex (1=Male, 0=Female):</label>
         <input type="number" name="sex" min="0" max="1" required>
 
@@ -80,7 +79,7 @@
         <input type="number" name="thalach" min="60" max="250" required>
 
         <label>Exercise-Induced Angina (1 = yes; 0 = no):</label>
-       <input type="number" name="exang" min="0" max="1" required>
+        <input type="number" name="exang" min="0" max="1" required>
 
         <label>Oldpeak:</label>
         <input type="number" step="0.1" name="oldpeak" min="0" max="10" required>
@@ -89,7 +88,7 @@
         <input type="number" name="slope" min="0" max="2" required>
 
         <label>Number of Major Vessels (0–3):</label>
-       <input type="number" name="ca" min="0" max="3" required>
+        <input type="number" name="ca" min="0" max="3" required>
 
         <label>Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect):</label>
         <input type="number" name="thal" min="1" max="3" required>
@@ -97,35 +96,39 @@
         <button type="submit">Predict</button>
 
         {% if prediction %}
-  <div class="{{ 'green-box' if 'No Risk' in prediction else 'red-box' }}">
-    <strong>{{ prediction }}</strong>
-  </div>
+            <div class="{{ 'red-box' if risk else 'green-box' }}">
+                <strong>{{ prediction }}</strong>
+            </div>
 
-  <canvas id="riskChart" width="400" height="400" style="margin-top: 30px;"></canvas>
+            <canvas id="riskChart" width="400" height="400" style="margin-top: 30px;"></canvas>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const ctx = document.getElementById('riskChart').getContext('2d');
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('riskChart').getContext('2d');
 
-    const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Risk', 'No Risk'],
-            datasets: [{
-                label: 'Prediction',
-                data: [{{ 100 if 'at risk' in prediction|lower else 0 }}, {{ 0 if 'at risk' in prediction|lower else 100 }}],
-                backgroundColor: ['#dc3545', '#28a745'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
-  </script>
-{% endif %}
+                const chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Risk', 'No Risk'],
+                        datasets: [{
+                            label: 'Prediction',
+                            data: [{{ 100 if risk else 0 }}, {{ 0 if risk else 100 }}],
+                            backgroundColor: ['#dc3545', '#28a745'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            </script>
+        {% endif %}
+    </form>
+
+</body>
+</html>
