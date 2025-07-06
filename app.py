@@ -4,7 +4,8 @@ import joblib
 app = Flask(__name__)
 
 # Load the model and scaler
-model = joblib.load("heart_model.pkl")
+model = joblib.load("model.pkl")  # ✅ match the name in train_model.py
+
 scaler = joblib.load("scaler.pkl")  # 👈 make sure this file exists in your folder
 
 @app.route("/")
