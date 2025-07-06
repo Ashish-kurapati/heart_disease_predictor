@@ -27,7 +27,7 @@ def predict():
         print("Prediction value:", prediction)
 
         # Assuming: 1 = Risk, 0 = No Risk
-        risk = prediction[0] == 1
+        risk = prediction[0] == 0
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 
         return render_template("index.html", prediction=result, risk=risk)
