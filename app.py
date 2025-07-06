@@ -22,6 +22,8 @@ def predict():
     # Predict using the model
     prediction = model.predict(data_scaled)
 
+       print("Prediction value:", prediction) 
+      
     # Prepare result (reversed logic now fixed too)
     result = "Risk of Heart Disease" if prediction[0] == 1 else "No Risk of Heart Disease"
 
