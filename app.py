@@ -14,27 +14,28 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        # Get user inputs from form and convert them to float
-        data = [float(x) for x in request.form.values()]
+        # Get input data from the form and convert to float
+        input_data = [float(x) for x in request.form.values()]
 
-        # Scale the input using the scaler
-        data_scaled = scaler.transform([data])
+        # Scale the input
+        scaled_data = scaler.transform([input_data])
 
-        # Make prediction using the model
-        prediction = model.predict(data_scaled)
+        # Predict using the model
+        prediction = model.predict(scaled_data)
 
-        # Debug log (helpful on Render deployment)
-        print("Prediction value:", prediction)
+        # Log the prediction result
+        print("Prediction:", prediction)
 
-        # Assuming: 1 = Risk, 0 = No Risk
-        risk = prediction[0] == 0
+        # Determine risk status (1 = Risk, 0 = No Risk)
+        risk = prediction[0] == 1
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 
+        # Return result to the HTML template
         return render_template("index.html", prediction=result, risk=risk)
 
     except Exception as e:
-        print("Error during prediction:", e)
-        return render_template("index.html", prediction="An error occurred. Please check input values.", risk=False)
+        print("Prediction Error:", e)
+        return render_template("index.html", prediction="An error occurred during prediction.", risk=False)
 
 if __name__ == "__main__":
     import os
