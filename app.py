@@ -20,18 +20,19 @@ def predict():
         # Scale the input
         scaled_data = scaler.transform([input_data])
 
-        # Predict using the model
-        prediction = model.predict(scaled_data)
+        # Make prediction and calculate survival chance
+        probabilities = model.predict_proba(scaled_data)[0]
+        prediction = model.predict(scaled_data)[0]
+        confidence = round(probabilities[prediction] * 100, 2)
 
-        # Log the prediction result
-        print("Prediction:", prediction)
-
-        # Determine risk status (1 = Risk, 0 = No Risk)
-        risk = prediction[0] == 1
+        # Assuming: 1 = Risk, 0 = No Risk
+        risk = prediction == 1
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 
-        # Return result to the HTML template
-        return render_template("index.html", prediction=result, risk=risk)
+        # Debug log
+        print("Prediction value:", prediction, "Confidence:", confidence)
+
+        return render_template("index.html", prediction=result, risk=risk, confidence=confidence)
 
     except Exception as e:
         print("Prediction Error:", e)
