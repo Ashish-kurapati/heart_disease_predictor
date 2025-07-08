@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import joblib
+import os
 
 app = Flask(__name__)
 
@@ -16,8 +17,6 @@ def predict():
     try:
         # Get input data from the form and convert to float
         input_data = [float(x) for x in request.form.values()]
-
-        # Scale the input
         scaled_data = scaler.transform([input_data])
 
         # Make prediction and calculate survival chance
@@ -25,20 +24,31 @@ def predict():
         prediction = model.predict(scaled_data)[0]
         confidence = round(probabilities[prediction] * 100, 2)
 
-        # Assuming: 1 = Risk, 0 = No Risk
+        # Determine risk
         risk = prediction == 1
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 
-        # Debug log
-        print("Prediction value:", prediction, "Confidence:", confidence)
+        # Chart data
+        chart_data = [confidence, 100 - confidence]
+        chart_labels = ["Risk" if risk else "No Risk", "No Risk" if risk else "Risk"]
+        chart_colors = ["#e74c3c", "#2ecc71"] if risk else ["#2ecc71", "#e74c3c"]
 
-        return render_template("index.html", prediction=result, risk=risk, confidence=confidence)
+        # Render result
+        return render_template(
+            "index.html",
+            prediction=result,
+            risk=risk,
+            confidence=confidence,
+            chart_data=chart_data,
+            chart_labels=chart_labels,
+            chart_colors=chart_colors
+        )
 
     except Exception as e:
         print("Prediction Error:", e)
         return render_template("index.html", prediction="An error occurred during prediction.", risk=False)
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+

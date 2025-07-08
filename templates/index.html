@@ -12,29 +12,38 @@
         .container {
             max-width: 500px;
             margin: auto;
-            background: #fff;
+            background: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #ccc;
-            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        input {
+        input[type="text"], select {
             width: 100%;
             padding: 8px;
-            margin: 6px 0;
+            margin: 8px 0 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        button {
-            padding: 10px 15px;
+        .btn {
             background-color: #007bff;
             color: white;
             border: none;
+            padding: 10px 20px;
+            text-align: center;
             border-radius: 5px;
-            margin-top: 10px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #0056b3;
         }
         .result {
             margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
         }
         .risk {
             background-color: #f8d7da;
@@ -44,46 +53,58 @@
             background-color: #d4edda;
             color: #155724;
         }
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Heart Disease Prediction</h2>
-        <form action="/predict" method="POST">
-            <input type="text" name="ca" placeholder="Number of Major Vessels (0–3)" required>
-            <input type="text" name="thal" placeholder="Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect)" required>
-            <button type="submit">Predict</button>
+        <h2 style="text-align: center;">Heart Disease Prediction</h2>
+        <form method="POST" action="/predict">
+            <input type="text" name="num_major_vessels" placeholder="Number of Major Vessels (0–3)" required>
+            <input type="text" name="thalassemia" placeholder="Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect)" required>
+            <button class="btn" type="submit">Predict</button>
         </form>
 
         {% if prediction %}
-        <div class="result {{ 'risk' if risk else 'no-risk' }}">
-            <h3>{{ prediction }}</h3>
-            <p><strong>Survival Confidence:</strong> {{ confidence }}%</p>
+        <div class="result {% if risk %}risk{% else %}no-risk{% endif %}">
+            {{ prediction }}
+            <br>
+            Survival Confidence: <strong>{{ confidence }}%</strong>
         </div>
+
+        <div class="chart-container">
+            <canvas id="resultChart" width="250" height="250"></canvas>
+            <div style="margin-top: 10px;">
+                <span style="color:red;">■ Risk</span> &nbsp;
+                <span style="color:green;">■ No Risk</span>
+            </div>
+        </div>
+
+        <script>
+            const ctx = document.getElementById("resultChart").getContext("2d");
+            const chart = new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Risk", "No Risk"],
+                    datasets: [{
+                        data: [{{ confidence }}, {{ 100 - confidence }}],
+                        backgroundColor: ["#dc3545", "#28a745"]
+                    }]
+                },
+                options: {
+                    cutout: "70%",
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        </script>
         {% endif %}
-
-        <canvas id="pieChart" width="300" height="300"></canvas>
     </div>
-
-    <script>
-        const riskConfidence = {{ confidence if confidence is defined else 0 }};
-        const ctx = document.getElementById('pieChart').getContext('2d');
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Risk', 'No Risk'],
-                datasets: [{
-                    data: [riskConfidence, 100 - riskConfidence],
-                    backgroundColor: ['#e74c3c', '#2ecc71'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-    </script>
 </body>
 </html>
