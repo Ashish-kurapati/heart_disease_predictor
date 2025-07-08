@@ -3,7 +3,7 @@ import joblib
 
 app = Flask(__name__)
 
-# Load the trained model and scaler
+# Load model and scaler
 model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
 
@@ -14,33 +14,43 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        # Get input data from the form and convert to float
-        input_data = [float(x) for x in request.form.values()]
+        # Get data from form
+        input_data = [
+            float(request.form["age"]),
+            float(request.form["sex"]),
+            float(request.form["cp"]),
+            float(request.form["trestbps"]),
+            float(request.form["chol"]),
+            float(request.form["fbs"]),
+            float(request.form["restecg"]),
+            float(request.form["thalach"]),
+            float(request.form["exang"]),
+            float(request.form["oldpeak"]),
+            float(request.form["slope"]),
+            float(request.form["ca"]),
+            float(request.form["thal"])
+        ]
 
-        # Scale the input
-        scaled_data = scaler.transform([input_data])
-
-        # Make prediction and calculate probabilities
-        probabilities = model.predict_proba(scaled_data)[0]
-        prediction = model.predict(scaled_data)[0]
+        # Scale and predict
+        data_scaled = scaler.transform([input_data])
+        probabilities = model.predict_proba(data_scaled)[0]
+        prediction = model.predict(data_scaled)[0]
         confidence = round(probabilities[prediction] * 100, 2)
 
-        # Determine if it's a risk case
-        risk = prediction == 1
+        # Interpret result
+        risk = prediction == 0
         result = "Risk of Heart Disease" if risk else "No Risk of Heart Disease"
 
-        # For pie chart: survival chance = 100 - risk %
-        survival = 100 - confidence if risk else confidence
-        death_risk = 100 - survival
-
-        # Debug
-        print("Prediction:", prediction, "| Confidence:", confidence, "| Survival:", survival)
-
-        return render_template("index.html", prediction=result, risk=risk, confidence=survival, death_risk=death_risk)
+        return render_template(
+            "index.html",
+            prediction=result,
+            risk=risk,
+            confidence=confidence
+        )
 
     except Exception as e:
         print("Prediction Error:", e)
-        return render_template("index.html", prediction="An error occurred during prediction.", risk=False)
+        return render_template("index.html", prediction="An error occurred.", risk=False)
 
 if __name__ == "__main__":
     import os
