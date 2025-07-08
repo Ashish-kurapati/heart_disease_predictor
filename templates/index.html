@@ -1,120 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Heart Disease Prediction</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Heart Disease Predictor</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #f0f8ff;
+        }
+        h1 {
+            color: #333;
         }
         .container {
-            max-width: 600px;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 60%;
+            margin: auto;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
         .result {
-            font-weight: bold;
-            font-size: 20px;
             margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
         canvas {
-            margin-top: 20px;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2 class="text-center">Heart Disease Prediction</h2>
-    <form action="/predict" method="post">
-        <div class="form-group mb-2">
+    <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <form action="/predict" method="post">
             <label>Age</label>
-            <input type="number" step="any" name="age" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Sex (1 = male, 0 = female)</label>
-            <input type="number" name="sex" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Chest Pain Type (0-3)</label>
-            <input type="number" name="cp" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Resting Blood Pressure</label>
-            <input type="number" name="trestbps" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Cholesterol</label>
-            <input type="number" name="chol" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Fasting Blood Sugar (> 120 mg/dl) (1 = true, 0 = false)</label>
-            <input type="number" name="fbs" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Rest ECG (0 = normal, 1 = ST-T wave abnormality, 2 = left ventricular hypertrophy)</label>
-            <input type="number" name="restecg" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Max Heart Rate</label>
-            <input type="number" name="thalach" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Exercise Induced Angina (1 = yes, 0 = no)</label>
-            <input type="number" name="exang" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Oldpeak (ST depression)</label>
-            <input type="number" step="any" name="oldpeak" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Slope (0 = upsloping, 1 = flat, 2 = downsloping)</label>
-            <input type="number" name="slope" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Number of Major Vessels (0–3)</label>
-            <input type="number" name="ca" class="form-control" required>
-        </div>
-        <div class="form-group mb-2">
-            <label>Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect)</label>
-            <input type="number" name="thal" class="form-control" required>
-        </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary mt-3">Predict</button>
-        </div>
-    </form>
+            <input type="number" name="age" required>
 
-    {% if prediction %}
-        <div class="result text-center mt-4">
-            <span class="{{ 'text-danger' if risk else 'text-success' }}">
-                {{ prediction }} (Confidence: {{ confidence }}%)
-            </span>
+            <label>Sex (1 = Male, 0 = Female)</label>
+            <input type="number" name="sex" min="0" max="1" required>
+
+            <label>Chest Pain Type (0–3)</label>
+            <input type="number" name="cp" min="0" max="3" required>
+
+            <label>Resting Blood Pressure</label>
+            <input type="number" name="trestbps" required>
+
+            <label>Cholesterol</label>
+            <input type="number" name="chol" required>
+
+            <label>Fasting Blood Sugar (>120 mg/dl, 1 = True, 0 = False)</label>
+            <input type="number" name="fbs" min="0" max="1" required>
+
+            <label>Resting ECG (0–2)</label>
+            <input type="number" name="restecg" min="0" max="2" required>
+
+            <label>Max Heart Rate Achieved</label>
+            <input type="number" name="thalach" required>
+
+            <label>Exercise Induced Angina (1 = Yes, 0 = No)</label>
+            <input type="number" name="exang" min="0" max="1" required>
+
+            <label>Oldpeak (ST depression)</label>
+            <input type="number" name="oldpeak" step="0.1" required>
+
+            <label>Slope (0–2)</label>
+            <input type="number" name="slope" min="0" max="2" required>
+
+            <label>Number of Major Vessels (0–3)</label>
+            <input type="number" name="ca" min="0" max="3" required>
+
+            <label>Thalassemia (1 = normal, 2 = fixed defect, 3 = reversible defect)</label>
+            <input type="number" name="thal" min="0" max="3" required>
+
+            <br>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            {{ prediction }}<br>
+            Survival Confidence: {{ confidence }}%
         </div>
-        <canvas id="confidenceChart" width="300" height="300"></canvas>
+
+        <canvas id="resultChart" width="400" height="400"></canvas>
+
         <script>
-            const ctx = document.getElementById('confidenceChart').getContext('2d');
-            new Chart(ctx, {
+            var ctx = document.getElementById('resultChart').getContext('2d');
+            var chart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: ['Confidence', 'Remaining'],
+                    labels: ['Survival Chance', 'Risk Chance'],
                     datasets: [{
-                        data: [{{ confidence }}, {{ 100 - confidence }}],
-                        backgroundColor: ['#007bff', '#e0e0e0']
+                        label: 'Prediction Confidence',
+                        data: [{{ confidence }}, {{ death_risk }}],
+                        backgroundColor: [
+                            '{{ "green" if not risk else "red" }}',
+                            '{{ "red" if not risk else "green" }}'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: { position: 'bottom' }
+                        legend: {
+                            position: 'bottom'
+                        }
                     }
                 }
             });
         </script>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 </body>
 </html>
