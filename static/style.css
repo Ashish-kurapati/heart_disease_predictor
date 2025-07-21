@@ -1,0 +1,93 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #0077b6;
+    margin-bottom: 30px;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    font-size: 15px;
+}
+
+.full-width {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #0077b6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #023e8a;
+}
+
+.result {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.result p {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.risk {
+    color: red;
+}
+
+.no-risk {
+    color: green;
+}
+
+canvas {
+    margin-top: 20px;
+}
+
+.footer-note {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #555;
+}

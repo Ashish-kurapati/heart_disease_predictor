@@ -4,111 +4,50 @@
     <meta charset="UTF-8">
     <title>Heart Disease Predictor</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f7ff;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .full-width {
-            grid-column: span 2;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .result {
-            margin-top: 30px;
-            text-align: center;
-        }
-        .result p {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .risk {
-            color: red;
-        }
-        .no-risk {
-            color: green;
-        }
-        canvas {
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
 <div class="container">
     <h1>Heart Disease Prediction</h1>
+
     <form action="/predict" method="POST">
         <label>Age</label>
         <input type="number" name="age" step="any" required>
-        
+
         <label>Sex (1 = Male, 0 = Female)</label>
         <input type="number" name="sex" step="any" required>
-        
+
         <label>Chest Pain Type (0–3)</label>
         <input type="number" name="cp" step="any" required>
-        
+
         <label>Resting Blood Pressure</label>
         <input type="number" name="trestbps" step="any" required>
-        
+
         <label>Cholesterol</label>
         <input type="number" name="chol" step="any" required>
-        
+
         <label>Fasting Blood Sugar (>120 mg/dl) (1 = True, 0 = False)</label>
         <input type="number" name="fbs" step="any" required>
-        
+
         <label>Rest ECG (0–2)</label>
         <input type="number" name="restecg" step="any" required>
-        
+
         <label>Maximum Heart Rate</label>
         <input type="number" name="thalach" step="any" required>
-        
+
         <label>Exercise Induced Angina (1 = Yes, 0 = No)</label>
         <input type="number" name="exang" step="any" required>
-        
+
         <label>Oldpeak</label>
         <input type="number" name="oldpeak" step="any" required>
-        
+
         <label>Slope (0–2)</label>
         <input type="number" name="slope" step="any" required>
-        
+
         <label>Number of Major Vessels (0–3)</label>
         <input type="number" name="ca" step="any" required>
-        
+
         <label>Thal (1 = Normal, 2 = Fixed Defect, 3 = Reversible Defect)</label>
         <input type="number" name="thal" step="any" required>
 
@@ -138,7 +77,7 @@
                 data: [{{ confidence }}, {{ 100 - confidence }}],
                 backgroundColor: [
                     "{{ 'red' if risk else 'green' }}",
-                    "#e0e0e0"
+                    "#d3e3e7"
                 ],
                 borderWidth: 1
             }]
@@ -154,5 +93,6 @@
     });
 </script>
 {% endif %}
+
 </body>
 </html>
