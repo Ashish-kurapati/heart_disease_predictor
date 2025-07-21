@@ -1,12 +1,13 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     background-image: url("background.png");
-    background-size: cover;
+    background-size: 150px;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: center;
+    background-color:rgba(255, 255, 255, 0.8);
+    background-position: center right;
     position: relative;
 }
 
@@ -34,7 +35,7 @@ body::before {
 
 h1 {
     text-align: center;
-    color: #0077b6;
+    color: #014468;
     margin-bottom: 30px;
 }
 
@@ -78,7 +79,7 @@ button {
 }
 
 button:hover {
-    background-color: #023e8a;
+    background-color: #198f7f;
 }
 
 .result {
@@ -92,11 +93,11 @@ button:hover {
 }
 
 .risk {
-    color: red;
+    color: rgb(150, 3, 3);
 }
 
 .no-risk {
-    color: green;
+    color: rgb(20, 175, 20);
 }
 
 canvas {
