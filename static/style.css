@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 20px;
-    background-image: url("static/heart.png");
+    background-image: url("/static/heart.png");
     background-size: 400px;
     background-repeat: no-repeat;
     background-attachment: fixed;
